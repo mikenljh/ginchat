@@ -1,0 +1,26 @@
+info:
+  contact: {}
+paths:
+  /index:
+    get:
+      description: 返回欢迎信息
+      responses:
+        "200":
+          description: Welcome
+          schema:
+            type: string
+      summary: 欢迎页面
+      tags:
+      - 首页
+  /user:
+    get:
+      description: 返回所有用户
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: string
+      summary: 用户页面
+      tags:
+      - 首页
+swagger: "2.0"

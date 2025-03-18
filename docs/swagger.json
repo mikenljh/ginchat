@@ -1,0 +1,42 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/index": {
+            "get": {
+                "description": "返回欢迎信息",
+                "tags": [
+                    "首页"
+                ],
+                "summary": "欢迎页面",
+                "responses": {
+                    "200": {
+                        "description": "Welcome",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "description": "返回所有用户",
+                "tags": [
+                    "首页"
+                ],
+                "summary": "用户页面",
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
