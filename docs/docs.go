@@ -32,11 +32,73 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/user/createUser": {
+            "get": {
+                "description": "新增用户",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "用户页面",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "确认密码",
+                        "name": "repassword",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/deleteUser": {
+            "get": {
+                "description": "删除用户",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "用户页面",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getUserList": {
             "get": {
                 "description": "返回所有用户",
                 "tags": [
-                    "首页"
+                    "用户模块"
                 ],
                 "summary": "用户页面",
                 "responses": {

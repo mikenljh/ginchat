@@ -12,7 +12,47 @@ paths:
       summary: 欢迎页面
       tags:
       - 首页
-  /user:
+  /user/createUser:
+    get:
+      description: 新增用户
+      parameters:
+      - description: 用户名
+        in: query
+        name: name
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      - description: 确认密码
+        in: query
+        name: repassword
+        type: string
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: string
+      summary: 用户页面
+      tags:
+      - 用户模块
+  /user/deleteUser:
+    get:
+      description: 删除用户
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: string
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: string
+      summary: 用户页面
+      tags:
+      - 用户模块
+  /user/getUserList:
     get:
       description: 返回所有用户
       responses:
@@ -22,5 +62,5 @@ paths:
             type: string
       summary: 用户页面
       tags:
-      - 首页
+      - 用户模块
 swagger: "2.0"
