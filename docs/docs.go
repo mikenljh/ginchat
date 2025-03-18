@@ -38,7 +38,7 @@ const docTemplate = `{
                 "tags": [
                     "用户模块"
                 ],
-                "summary": "用户页面",
+                "summary": "添加用户",
                 "parameters": [
                     {
                         "type": "string",
@@ -75,7 +75,7 @@ const docTemplate = `{
                 "tags": [
                     "用户模块"
                 ],
-                "summary": "用户页面",
+                "summary": "删除用户",
                 "parameters": [
                     {
                         "type": "string",
@@ -100,7 +100,44 @@ const docTemplate = `{
                 "tags": [
                     "用户模块"
                 ],
-                "summary": "用户页面",
+                "summary": "查看所有用户",
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/updateUser": {
+            "post": {
+                "description": "修改用户",
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "修改用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
+                        "in": "formData"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "code\",\"message\"}",

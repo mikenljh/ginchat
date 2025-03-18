@@ -33,7 +33,7 @@ paths:
           description: code","message"}
           schema:
             type: string
-      summary: 用户页面
+      summary: 添加用户
       tags:
       - 用户模块
   /user/deleteUser:
@@ -49,7 +49,7 @@ paths:
           description: code","message"}
           schema:
             type: string
-      summary: 用户页面
+      summary: 删除用户
       tags:
       - 用户模块
   /user/getUserList:
@@ -60,7 +60,31 @@ paths:
           description: code","message"}
           schema:
             type: string
-      summary: 用户页面
+      summary: 查看所有用户
+      tags:
+      - 用户模块
+  /user/updateUser:
+    post:
+      description: 修改用户
+      parameters:
+      - description: id
+        in: formData
+        name: id
+        type: string
+      - description: name
+        in: formData
+        name: name
+        type: string
+      - description: password
+        in: formData
+        name: password
+        type: string
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: string
+      summary: 修改用户
       tags:
       - 用户模块
 swagger: "2.0"

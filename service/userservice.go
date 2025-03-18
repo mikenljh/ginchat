@@ -9,7 +9,7 @@ import (
 
 // GetUserList
 // @Tags        用户模块
-// @Summary     用户页面
+// @Summary     查看所有用户
 // @Description 返回所有用户
 // @Success      200 {string} json{"code","message"}
 // @Router      /user/getUserList [get]
@@ -30,7 +30,7 @@ func GetUserList(c *gin.Context) {
 // @param name query string false "用户名"
 // @param password query string false "密码"
 // @param repassword query string false "确认密码"
-// @Summary     用户页面
+// @Summary     添加用户
 // @Description 新增用户
 // @Success      200 {string} json{"code","message"}
 // @Router      /user/createUser [get]
@@ -57,7 +57,7 @@ func CreateUser(c *gin.Context) {
 // DeleteUser
 // @Tags        用户模块
 // @param id query string false "id"
-// @Summary     用户页面
+// @Summary     删除用户
 // @Description 删除用户
 // @Success      200 {string} json{"code","message"}
 // @Router      /user/deleteUser [get]
@@ -68,6 +68,28 @@ func DeleteUser(c *gin.Context) {
 	models.DeleteUser(user)
 	c.JSON(200, gin.H{
 		"message": "删除用户成功",
+	})
+
+}
+
+// UpdateUser
+// @Tags        用户模块
+// @param id formData string false "id"
+// @param name formData string false "name"
+// @param password formData string false "password"
+// @Summary     修改用户
+// @Description 修改用户
+// @Success      200 {string} json{"code","message"}
+// @Router      /user/updateUser [post]
+func UpdateUser(c *gin.Context) {
+	user := models.UserBasic{}
+	id, _ := strconv.Atoi(c.PostForm("id"))
+	user.ID = uint(id)
+	user.Name = c.PostForm("name")
+	user.PassWord = c.PostForm("password")
+	models.UpdateUser(user)
+	c.JSON(200, gin.H{
+		"message": "修改用户成功",
 	})
 
 }
