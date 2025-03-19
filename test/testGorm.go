@@ -1,11 +1,11 @@
 package main
 
-// import (
-// 	"ginchat/models"
+import (
+	"ginchat/models"
 
-// 	"gorm.io/driver/mysql"
-// 	"gorm.io/gorm"
-// )
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
 
 // // type Product struct {
 // // 	gorm.Model
@@ -13,13 +13,16 @@ package main
 // // 	Price uint
 // // }
 
-// func main() {
-// 	db, err := gorm.Open(mysql.Open("root:root@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local"))
-// 	if err != nil {
-// 		panic("failed to open")
-// 	}
-// 	// 迁移 schema
-// 	db.AutoMigrate(&models.UserBasic{})
+func main() {
+	db, err := gorm.Open(mysql.Open("root:root@tcp(127.0.0.1:3306)/ginchat?charset=utf8mb4&parseTime=True&loc=Local"))
+	if err != nil {
+		panic("failed to open")
+	}
+	// 迁移 schema
+	db.AutoMigrate(&models.Message{})
+	db.AutoMigrate(&models.Contact{})
+	db.AutoMigrate(&models.GroupBasic{})
+}
 
 // 	// Create
 // 	// user := &models.UserBasic{

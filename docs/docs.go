@@ -106,13 +106,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "用户名",
                         "name": "name",
-                        "in": "query"
+                        "in": "formData"
                     },
                     {
                         "type": "string",
                         "description": "密码",
                         "name": "password",
-                        "in": "query"
+                        "in": "formData"
                     }
                 ],
                 "responses": {

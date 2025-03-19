@@ -5,10 +5,13 @@ import (
 	"ginchat/models"
 	"ginchat/utils"
 	"math/rand"
+	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 // GetUserList
@@ -23,7 +26,7 @@ func GetUserList(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"code":    0,
-		"message": "success",
+		"message": "查找成功",
 		"data":    data,
 	})
 
@@ -47,12 +50,14 @@ func CreateUser(c *gin.Context) {
 	data := models.FindUserByName(user.Name)
 	if data.Name != "" {
 		c.JSON(-1, gin.H{
+			"code":    -1,
 			"message": "该用户名已注册",
 		})
 		return
 	}
 	if password != repassword {
-		c.JSON(200, gin.H{
+		c.JSON(-1, gin.H{
+			"code":    -1,
 			"message": "两次输入的密码不一致",
 		})
 		return
@@ -62,6 +67,7 @@ func CreateUser(c *gin.Context) {
 	models.CreateUser(user)
 
 	c.JSON(200, gin.H{
+		"code":    0,
 		"message": "新增用户成功",
 	})
 
@@ -80,6 +86,7 @@ func DeleteUser(c *gin.Context) {
 	user.ID = uint(id)
 	models.DeleteUser(user)
 	c.JSON(200, gin.H{
+		"code":    0,
 		"message": "删除用户成功",
 	})
 
@@ -108,12 +115,14 @@ func UpdateUser(c *gin.Context) {
 	_, err := govalidator.ValidateStruct(user)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(200, gin.H{
+		c.JSON(-1, gin.H{
+			"code":    -1,
 			"message": "修改参数不匹配",
 		})
 	}
 	models.UpdateUser(user)
 	c.JSON(200, gin.H{
+		"code":    0,
 		"message": "修改用户成功",
 	})
 
@@ -123,17 +132,18 @@ func UpdateUser(c *gin.Context) {
 // @Tags        用户模块
 // @Summary     登录
 // @Description 通过用户名和密码登录
-// @param name query string false "用户名"
-// @param password query string false "密码"
+// @param name formData string false "用户名"
+// @param password formData string false "密码"
 // @Success      200 {string} json{"code","message"}
 // @Router      /user/findUserByNameAndPwd [post]
 func FindUserByNameAndPwd(c *gin.Context) {
 	data := models.UserBasic{}
-	name := c.Query("name")
-	password := c.Query("password")
+	name := c.PostForm("name")
+	password := c.PostForm("password")
 	user := models.FindUserByName(name)
 	if user.Name == "" {
-		c.JSON(200, gin.H{
+		c.JSON(-1, gin.H{
+			"code":    -1,
 			"message": "该用户不存在",
 		})
 		return
@@ -142,7 +152,8 @@ func FindUserByNameAndPwd(c *gin.Context) {
 	flag := utils.ValidPassword(password, user.Salt, user.PassWord)
 
 	if !flag {
-		c.JSON(200, gin.H{
+		c.JSON(-1, gin.H{
+			"code":    -1,
 			"message": "密码不正确",
 		})
 		return
@@ -152,8 +163,48 @@ func FindUserByNameAndPwd(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"code":    0,
-		"message": "success",
+		"message": "登录成功",
 		"data":    data,
 	})
 
+}
+
+// 防止跨域站点的伪造请求
+var upGrade = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func SendMsg(c *gin.Context) {
+	ws, err := upGrade.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		fmt.Println("upgrade:", err)
+		return
+	}
+	defer func(ws *websocket.Conn) {
+		err = ws.Close()
+		if err != nil {
+			fmt.Println("websocket close error:", err)
+		}
+	}(ws)
+	MsgHandler(ws, c)
+}
+
+func MsgHandler(ws *websocket.Conn, c *gin.Context) {
+	msg, err := utils.Subscribe(c, utils.PublishKey)
+	if err != nil {
+		fmt.Println("subscribe error:", err)
+		return
+	}
+	tm := time.Now().Format("2006-01-02 15:04:05")
+	m := fmt.Sprintf("[ws][%s]:%s", tm, msg)
+	err = ws.WriteMessage(1, []byte(m))
+	if err != nil {
+		fmt.Println("write error:", err)
+	}
+}
+
+func SendUserMsg(c *gin.Context) {
+	models.Chat(c.Writer, c.Request)
 }
